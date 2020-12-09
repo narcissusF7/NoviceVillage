@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.PointMapper">
+    <select id="findAll"  resultType="PointInf" resultMap="users">
+        select * from t_point
+    </select>
+    <select id="selectUserByPoint" parameterType="java.lang.Integer" resultType="UserInf">
+        select * from t_user where userId=#{userId}
+    </select>
+    <resultMap type="PointInf" id="users">
+        <id column="userId" property="userId"></id>
+        <result column="action" property="action"></result>
+        <result column="updateTime" property="updateTime"></result>
+        <result column="type" property="type"></result>
+        <result column="pointChange" property="pointChange"></result>
+        <collection column="userId" property="users" ofType="UserInf" select="selectUserByPoint">
+            <id column="userId" property="userId"></id>
+            <result column="account" property="account"></result>
+            <result column="password" property="password"></result>
+            <result column="sex" property="sex"></result>
+            <result column="phoneNum" property="phoneNum"></result>
+            <result column="roleId" property="roleId"></result>
+            <result column="points" property="points"></result>
+            <result column="regTime" property="regTime"></result>
+            <result column="education" property="education"></result>
+            <result column="profession" property="profession"></result>
+            <result column="email" property="email"></result>
+            <result column="userState" property="userState"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findAllUser" resultType="UserInf" resultMap="pointMap">
+        select * from t_user
+    </select>
+    <select id="selectPointByUser" parameterType="java.lang.Integer" resultType="PointInf">
+            select * from t_point where userId=#{userId}
+    </select>
+        <resultMap id="pointMap" type="UserInf">
+            <id column="userId" property="userId"></id>
+            <result column="account" property="account"></result>
+            <result column="password" property="password"></result>
+            <result column="sex" property="sex"></result>
+            <result column="phoneNum" property="phoneNum"></result>
+            <result column="roleId" property="roleId"></result>
+            <result column="points" property="points"></result>
+            <result column="regTime" property="regTime"></result>
+            <result column="education" property="education"></result>
+            <result column="profession" property="profession"></result>
+            <result column="email" property="email"></result>
+            <result column="userState" property="userState"></result>
+            <association property="pointInfs" column="userId" javaType="PointInf" select="selectPointByUser">
+                <id column="userId" property="userId"></id>
+                <result column="action" property="action"></result>
+                <result column="updateTime" property="updateTime"></result>
+                <result column="type" property="type"></result>
+                <result column="pointChange" property="pointChange"></result>
+            </association>
+        </resultMap>
+    <select id="findUserByJoin" resultMap="OneToMary">
+        select t1.* ,t2.* from t_point t2 left join t_user t1 on t1.userId =t2.userId;
+    </select>
+    <resultMap id="OneToMary" type="PointInf">
+        <id column="userId" property="userId"></id>
+        <result column="action" property="action"></result>
+        <result column="updateTime" property="updateTime"></result>
+        <result column="type" property="type"></result>
+        <result column="pointChange" property="pointChange"></result>
+        <collection property="users" ofType="UserInf">
+            <id column="userId" property="userId"></id>
+            <result column="account" property="account"></result>
+            <result column="password" property="password"></result>
+            <result column="sex" property="sex"></result>
+            <result column="phoneNum" property="phoneNum"></result>
+            <result column="roleId" property="roleId"></result>
+            <result column="points" property="points"></result>
+            <result column="regTime" property="regTime"></result>
+            <result column="education" property="education"></result>
+            <result column="profession" property="profession"></result>
+            <result column="email" property="email"></result>
+            <result column="userState" property="userState"></result>
+        </collection>
+    </resultMap>
+
+    <select id="findUserByJoin2" resultMap="maryToOne">
+        select t1.* ,t2.* from t_user t1 left join t_point t2 on t1.userId =t2.userId;
+    </select>
+    <resultMap id="maryToOne" type="UserInf">
+        <id column="userId" property="userId"></id>
+        <result column="account" property="account"></result>
+        <result column="password" property="password"></result>
+        <result column="sex" property="sex"></result>
+        <result column="phoneNum" property="phoneNum"></result>
+        <result column="roleId" property="roleId"></result>
+        <result column="points" property="points"></result>
+        <result column="regTime" property="regTime"></result>
+        <result column="education" property="education"></result>
+        <result column="profession" property="profession"></result>
+        <result column="email" property="email"></result>
+        <result column="userState" property="userState"></result>
+        <association property="pointInf" javaType="PointInf">
+            <id column="userId" property="userId"></id>
+            <result column="action" property="action"></result>
+            <result column="updateTime" property="updateTime"></result>
+            <result column="type" property="type"></result>
+            <result column="pointChange" property="pointChange"></result>
+        </association>
+    </resultMap>
+
+</mapper>

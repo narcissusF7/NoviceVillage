@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.UserMapper">
+    <insert id="addUser" parameterType="UserInf" keyProperty="userId" useGeneratedKeys="true">
+        insert into t_user (account,password,sex,phoneNum,email,education,profession,userState,regTime,points
+        ) values (#{account},#{password},#{sex},#{phoneNum},#{email},#{education},#{profession},#{userState},DATE_FORMAT(NOW(),'%Y-%m-%d'),
+        (SELECT value from t_dic  where name = '注册奖励'))
+    </insert>
+    <delete id="deleteUserById" parameterType="UserInf">
+        delete from t_user where userId = #{userId};
+    </delete>
+    <update id="updateUser" parameterType="UserInf">
+        update t_user set password = #{password} where userId = #{userId};
+    </update>
+    <update id="changeState" parameterType="UserInf">
+        update t_user
+        <set>
+            <if test="userState!=null">
+                userState = #{userState}
+            </if>
+        </set>
+        <where>
+            userId = #{userId}
+        </where>
+    </update>
+<!--    prefix:前缀覆盖并增加其内容-->
+<!--    suffix:后缀覆盖并增加其内容-->
+<!--    prefixOverrides：前缀判断条件-->
+<!--    suffixOverrides：后缀判断条件-->
+    <select id="findAll" parameterType="UserInf" resultType="UserInf">
+        select * from t_user
+        <trim prefix="where" prefixOverrides="and">
+            <if test="regTimeend!=null">
+                and regTime &lt;=#{regTimeend}
+            </if>
+            <if test="regTimebeg!=null">
+                and regTime &gt;=#{regTimebeg}
+            </if>
+            <if test="account!=null">
+                and account like concat('%',#{account},'%')
+            </if>
+        </trim>
+<!--        <where>-->
+<!--            <if test="regTimeend!=null">-->
+<!--                and regTime &lt;=#{regTimeend}-->
+<!--            </if>-->
+<!--            <if test="regTimebeg!=null">-->
+<!--                and regTime &gt;=#{regTimebeg}-->
+<!--            </if>-->
+<!--            <if test="account!=null">-->
+<!--                and account like concat('%',#{account},'%')-->
+<!--            </if>-->
+<!--        </where>      -->
+    </select>
+    <select id="login" resultType="UserInf">
+        select * from t_user where account = #{account} and password = #{password};
+
+<!--        <if test="id!=null and account!=null">-->
+<!--             <where>-->
+<!--                 id=${id}-->
+<!--             </where>-->
+<!--        </if>-->
+<!--        <choose>-->
+<!--            <when test="userName!=null">-->
+
+<!--            </when>-->
+<!--            <otherwise>-->
+
+<!--            </otherwise>-->
+<!--        </choose>-->
+
+    </select>
+<!--    <foreach collection="list" item="i" open="(" separator="," close=")">-->
+<!--        #{i}-->
+<!--    </foreach>-->
+</mapper>

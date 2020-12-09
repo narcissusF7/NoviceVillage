@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!--打印sql语句-->
+    <settings>
+    <setting name="lazyLoadingEnabled" value="false" />
+    <setting name="cacheEnabled" value="false" />
+    <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+    <typeAliases><!-- 在mybatis-config.xml配置中使用别名，方便省去输入全路径 -->
+        <typeAlias type="com.cykj.bean.UserInf" alias="UserInf"/>
+        <typeAlias type="com.cykj.bean.PointInf" alias="PointInf"/>
+        <typeAlias type="com.cykj.bean.FileInf" alias="FileInf"/>
+    </typeAliases>
+    <!-- 环境配置 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <!-- 数据库连接相关配置 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver" />
+                <property name="url" value="jdbc:mysql://localhost:3306/cywp?characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC&amp;rewriteBatchedStatements=true" />
+                <property name="username" value="root" />
+                <property name="password" value="admin" />
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- mapping文件路径配置（创建问UserMapper后才需要引入） -->
+    <mappers>
+        <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/PointMapper.xml"/>
+        <mapper resource="mapper/FileMapper.xml"/>
+    </mappers>
+</configuration>

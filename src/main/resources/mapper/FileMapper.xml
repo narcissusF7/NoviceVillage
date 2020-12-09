@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.FileMapper">
+    <select id="findAll" parameterType="FileInf" resultType="FileInf">
+    select * from t_file
+    <trim prefix="where" prefixOverrides="and">
+        <if test="timeEnd!=null and timeEnd!=''">
+            and uploadTime &lt;=#{timeEnd}
+        </if>
+        <if test="timeBeg!=null and timeBeg!=''">
+            and uploadTime &gt;=#{timeBeg}
+        </if>
+        <if test="account!=null and account!=''">
+            and account like concat('%',#{account},'%')
+        </if>
+        <if test="fileType!=null">
+            and (fileType like concat('%',#{fileType}) or fileType like concat('%',#{fileType},'_'))
+        </if>
+        <if test="fileName!=null and fileName!=''">
+            and fileName like concat('%',#{fileName},'%')
+        </if>
+    </trim>
+    </select>
+
+    <update id="updateFile" parameterType="FileInf">
+        update t_file
+        <trim prefix="set" prefixOverrides=",">
+            <if test="fileState!=null and fileState!=''">
+                , fileState = #{fileState}
+            </if>
+        </trim>
+        <trim prefix="where" prefixOverrides="and">
+            <if test="fileId!=null and fileId!= 0">
+                and fileId =#{fileId}
+            </if>
+        </trim>
+    </update>
+</mapper>
